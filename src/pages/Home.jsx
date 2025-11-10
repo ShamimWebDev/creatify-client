@@ -7,7 +7,6 @@ import TopArtists from "../components/TopArtists";
 const Home = () => {
   return (
     <div>
-      <Navbar></Navbar>
       <Banner></Banner>
       <ArtCard></ArtCard>
       <TopArtists></TopArtists>
