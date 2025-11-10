@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from 'react-router-dom'
 
 
 
@@ -20,6 +20,7 @@ import Registration from "../pages/Auth/Registration";
 import Banner from "../components/Banner";
 import ArtCard from "../components/ArtCard";
 import TopArtists from "../components/TopArtists";
+import CommunityHighlights from "../components/CommunityHighlights";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,11 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <TopArtists></TopArtists>,
+       
+      },
+      {
+        path: "/",
+        element: <CommunityHighlights></CommunityHighlights>,
        
       },
     //   {

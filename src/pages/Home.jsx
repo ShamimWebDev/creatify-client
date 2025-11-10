@@ -1,5 +1,6 @@
 import ArtCard from "../components/ArtCard";
 import Banner from "../components/Banner";
+import CommunityHighlights from "../components/CommunityHighlights";
 import Navbar from "../components/Navbar";
 import TopArtists from "../components/TopArtists";
 
@@ -10,6 +11,7 @@ const Home = () => {
       <Banner></Banner>
       <ArtCard></ArtCard>
       <TopArtists></TopArtists>
+      <CommunityHighlights></CommunityHighlights>
 
       {/* <div className="text-center text-xl font-bold mt-10">Latest ArtWork</div> */}
 
