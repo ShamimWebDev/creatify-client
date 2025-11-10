@@ -18,6 +18,8 @@ import MainLayout from "../layout/MainLayout";
 import Login from "../pages/Auth/Login";
 import Registration from "../pages/Auth/Registration";
 import Banner from "../components/Banner";
+import ArtCard from "../components/ArtCard";
+import TopArtists from "../components/TopArtists";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,16 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Banner></Banner>,
+       
+      },
+      {
+        path: "/",
+        element: <ArtCard></ArtCard>,
+       
+      },
+      {
+        path: "/",
+        element: <TopArtists></TopArtists>,
        
       },
     //   {
