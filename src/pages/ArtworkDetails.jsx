@@ -58,14 +58,17 @@ const ArtworkDetails = () => {
   const handleFavorite = async () => {
     if (!user) return toast.info("Please login to favorite");
     try {
-      const updated = await toggleFavorite(id);
-      // optimistic update: if server returns favorites info, set it; otherwise toggle boolean
-      if (updated && updated.favorites != null)
-        setArtwork((a) => ({ ...a, favorites: updated.favorites }));
-      toast.success("Toggled favorite");
+      const isFav =
+        artwork.favorites && Array.isArray(artwork.favorites)
+          ? artwork.favorites.includes(user.email)
+          : false;
+      const action = isFav ? "remove" : "add";
+      const updated = await toggleFavorite(id, user.email, action);
+      if (updated) setArtwork(updated);
+      toast.success("Already added to favorites");
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to update favorites");
+      console.error("favorite toggle error:", err);
+      toast.error(err?.message || "Failed to update favorites");
     }
   };
 

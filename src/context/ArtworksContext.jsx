@@ -45,7 +45,13 @@ export const ArtworksProvider = ({ children }) => {
   const addArtwork = useCallback(async (payload) => {
     try {
       setLoading(true);
-      const created = await api.createArtwork(payload);
+      const createdResult = await api.createArtwork(payload);
+      // server returns Mongo insertOne result { acknowledged, insertedId }
+      let created = createdResult;
+      if (createdResult && createdResult.insertedId) {
+        // fetch the inserted document to have the full artwork object
+        created = await api.getArtworkById(createdResult.insertedId);
+      }
       // prepend to local list (if public)
       setArtworks((prev) => (created ? [created, ...prev] : prev));
       return created;
@@ -59,13 +65,10 @@ export const ArtworksProvider = ({ children }) => {
 
   const likeArtwork = useCallback(async (id) => {
     try {
-      const updated = await api.likeArtwork(id);
-      // update local copy if present
-      setArtworks((prev) =>
-        prev.map((a) =>
-          a._id === id ? { ...a, likes: updated.likes ?? (a.likes || 0) } : a
-        )
-      );
+      await api.likeArtwork(id);
+      // server returns update result; fetch latest document to update local state
+      const updated = await api.getArtworkById(id);
+      setArtworks((prev) => prev.map((a) => (a._id === id ? updated : a)));
       return updated;
     } catch (err) {
       console.error("likeArtwork error:", err);
@@ -73,16 +76,13 @@ export const ArtworksProvider = ({ children }) => {
     }
   }, []);
 
-  const toggleFavorite = useCallback(async (id) => {
+  // toggleFavorite now requires userEmail and action ('add'|'remove') to match server
+  const toggleFavorite = useCallback(async (id, userEmail, action = "add") => {
     try {
-      const updated = await api.toggleFavorite(id);
-      setArtworks((prev) =>
-        prev.map((a) =>
-          a._id === id
-            ? { ...a, favorites: updated.favorites ?? a.favorites }
-            : a
-        )
-      );
+      await api.toggleFavorite(id, { userEmail, action });
+      // fetch latest doc after favorite toggle
+      const updated = await api.getArtworkById(id);
+      setArtworks((prev) => prev.map((a) => (a._id === id ? updated : a)));
       return updated;
     } catch (err) {
       console.error("toggleFavorite error:", err);
@@ -92,7 +92,9 @@ export const ArtworksProvider = ({ children }) => {
 
   const updateArtwork = useCallback(async (id, data) => {
     try {
-      const updated = await api.updateArtwork(id, data);
+      await api.updateArtwork(id, data);
+      // fetch updated document (server returns update result)
+      const updated = await api.getArtworkById(id);
       setArtworks((prev) => prev.map((a) => (a._id === id ? updated : a)));
       return updated;
     } catch (err) {

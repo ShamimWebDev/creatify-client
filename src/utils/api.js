@@ -49,9 +49,13 @@ export const likeArtwork = (id) =>
     method: "PATCH",
   });
 
-export const toggleFavorite = (id) =>
+export const toggleFavorite = (id, body = {}) =>
   request(`/artworks/${id}/favorite`, {
     method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
   });
 
 export const updateArtwork = (id, data) =>

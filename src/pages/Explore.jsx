@@ -19,7 +19,7 @@ const Explore = () => {
       if (typeof fetchArtworks === "function") {
         fetchArtworks(
           q
-            ? { visibility: "public", q, sort: "-createdAt" }
+            ? { visibility: "public", search: q, sort: "-createdAt" }
             : { visibility: "public", sort: "-createdAt" }
         );
       }
@@ -33,7 +33,7 @@ const Explore = () => {
     const q = query?.trim();
     fetchArtworks(
       q
-        ? { visibility: "public", q, sort: "-createdAt" }
+        ? { visibility: "public", search: q, sort: "-createdAt" }
         : { visibility: "public", sort: "-createdAt" }
     );
   };
