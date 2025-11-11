@@ -3,14 +3,15 @@ import Banner from "../components/Banner";
 import CommunityHighlights from "../components/CommunityHighlights";
 import Navbar from "../components/Navbar";
 import TopArtists from "../components/TopArtists";
+import PageMotion from "../components/PageMotion";
 
 const Home = () => {
   return (
-    <div>
-      <Banner></Banner>
-      <ArtCard></ArtCard>
-      <TopArtists></TopArtists>
-      <CommunityHighlights></CommunityHighlights>
+    <PageMotion className="">
+      <Banner />
+      <ArtCard />
+      <TopArtists />
+      <CommunityHighlights />
 
       {/* <div className="text-center text-xl font-bold mt-10">Latest ArtWork</div> */}
 
@@ -19,7 +20,7 @@ const Home = () => {
           <ArtCardCard key={model._id} model={model} />
         ))} */}
       </div>
-    </div>
+    </PageMotion>
   );
 };
 

@@ -3,6 +3,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useArtworks } from "../context/ArtworksContext";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+import PageMotion from "../components/PageMotion";
 
 const MyGallery = () => {
   const { user } = useContext(AuthContext);
@@ -69,12 +71,14 @@ const MyGallery = () => {
   };
 
   return (
-    <div className="p-6">
+    <PageMotion className="p-6">
       <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
       {!user ? (
         <div>Please login to view your gallery.</div>
       ) : loading ? (
-        <div>Loading...</div>
+        <div className="py-10">
+          <Spinner />
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -160,7 +164,7 @@ const MyGallery = () => {
           )}
         </>
       )}
-    </div>
+    </PageMotion>
   );
 };
 

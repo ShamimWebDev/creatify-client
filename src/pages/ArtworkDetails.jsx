@@ -4,6 +4,8 @@ import { useArtworks } from "../context/ArtworksContext";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+import PageMotion from "../components/PageMotion";
 
 const ArtworkDetails = () => {
   const { id } = useParams();
@@ -38,7 +40,12 @@ const ArtworkDetails = () => {
   }, [artwork, fetchArtworks]);
 
   if (!id) return <div className="p-6">Invalid artwork id.</div>;
-  if (loading) return <div className="p-6">Loading...</div>;
+  if (loading)
+    return (
+      <div className="p-6">
+        <Spinner />
+      </div>
+    );
   if (!artwork) return <div className="p-6">Artwork not found.</div>;
 
   const handleLike = async () => {
@@ -73,7 +80,7 @@ const ArtworkDetails = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <PageMotion className="p-6 max-w-4xl mx-auto">
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <img
@@ -136,7 +143,7 @@ const ArtworkDetails = () => {
           </div>
         </aside>
       </div>
-    </div>
+    </PageMotion>
   );
 };
 

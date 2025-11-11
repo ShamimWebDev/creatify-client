@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Button from "../ui/Button";
 import { Link } from "react-router-dom";
 import { useArtworks } from "../context/ArtworksContext";
+import Spinner from "./Spinner";
 
 const ArtCard = () => {
   const { artworks, loading, fetchArtworks } = useArtworks();
@@ -35,7 +36,9 @@ const ArtCard = () => {
       </div>
 
       {loading ? (
-        <div className="text-center">Loading...</div>
+        <div className="text-center">
+          <Spinner />
+        </div>
       ) : (
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8 px-10 md:px-24">
           {displayed && displayed.length ? (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaSearch, FaTimes } from "react-icons/fa";
 import { useArtworks } from "../context/ArtworksContext";
+import PageMotion from "../components/PageMotion";
 
 const Explore = () => {
   const { artworks, loading, fetchArtworks } = useArtworks();
@@ -56,7 +57,7 @@ const Explore = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-linear-to-br from-[#1e1b4b] via-[#4c1d95] to-[#831843]">
+    <PageMotion className="p-6 min-h-screen bg-linear-to-br from-[#1e1b4b] via-[#4c1d95] to-[#831843]">
       <h2 className="text-3xl font-extrabold text-white mb-6 text-center">
         Explore Artworks
       </h2>
@@ -188,7 +189,7 @@ const Explore = () => {
           )}
         </div>
       )}
-    </div>
+    </PageMotion>
   );
 };
 
