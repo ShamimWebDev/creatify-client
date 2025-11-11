@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
-  const { user, signOutFunc } = useContext(AuthContext);
+  const { user, signOutFunc, loading } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const avatarRef = React.useRef(null);
+  const closeTimerRef = React.useRef(null);
 
   // Close dropdown when clicking outside and on Escape
   React.useEffect(() => {
@@ -31,9 +32,25 @@ function Navbar() {
     };
   }, [showDropdown]);
 
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const startCloseTimer = (delay = 150) => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => setShowDropdown(false), delay);
+  };
+
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       await signOutFunc();
+      setShowDropdown(false);
+      navigate("/login");
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -56,12 +73,16 @@ function Navbar() {
   return (
     <nav className="flex items-center justify-between px-10 py-4 bg-white shadow">
       {/* Left: Logo + Name */}
-      <div className="flex items-center">
-        <div className="p-2 rounded-full">
-          <img src="logo.PNG" alt="Logo" className="w-10 h-10" />
+      <Link to="/">
+        <div className="flex items-center">
+          <div className="p-2 rounded-full">
+            <img src="logo.PNG" alt="Logo" className="w-10 h-10" />
+          </div>
+          <h1 className="text-2xl font-semibold text-gray-800 ml-2">
+            Creatify
+          </h1>
         </div>
-        <h1 className="text-2xl font-semibold text-gray-800 ml-2">Creatify</h1>
-      </div>
+      </Link>
 
       {/* Center: Navigation Links */}
       <ul className="hidden md:flex items-center gap-8 text-gray-600 text-sm font-medium">
@@ -76,12 +97,12 @@ function Navbar() {
           </Link>
         </li>
         <li>
-          <Link to="/add" className="hover:text-purple-600">
+          <Link to="/add-artwork" className="hover:text-purple-600">
             Add Artwork
           </Link>
         </li>
         <li>
-          <Link to="/gallery" className="hover:text-purple-600">
+          <Link to="/my-gallery" className="hover:text-purple-600">
             My Gallery
           </Link>
         </li>
@@ -93,14 +114,20 @@ function Navbar() {
       </ul>
 
       {/* Right: Auth Buttons / Profile */}
-      {user ? (
+      {loading ? (
+        // while auth is initializing, keep space to avoid layout shift
+        <div className="w-40" />
+      ) : user ? (
         <div className="flex items-center gap-4">
           {/* Profile Image */}
           <div
             ref={avatarRef}
             className="relative w-12 h-12 cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-400"
-            onMouseEnter={() => setShowDropdown(true)}
-            onMouseLeave={() => setShowDropdown(false)}
+            onMouseEnter={() => {
+              clearCloseTimer();
+              setShowDropdown(true);
+            }}
+            onMouseLeave={() => startCloseTimer()}
             onClick={toggleDropdown}
             role="button"
             tabIndex={0}
@@ -120,8 +147,8 @@ function Navbar() {
                   ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
                   : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
               }`}
-              onMouseEnter={() => setShowDropdown(true)}
-              onMouseLeave={() => setShowDropdown(false)}
+              onMouseEnter={() => clearCloseTimer()}
+              onMouseLeave={() => startCloseTimer()}
               onClick={(e) => e.stopPropagation()}
               role="menu"
               aria-hidden={!showDropdown}
@@ -129,42 +156,29 @@ function Navbar() {
               <p className="text-white font-semibold text-sm">
                 {user.displayName || "N/A"}
               </p>
-              <p className="text-white text-xs mb-2">{user.email}</p>
-              <div className="flex flex-col gap-2">
-                <Link
-                  to="/profile"
-                  className="text-sm text-white/90 hover:text-purple-400 px-3 py-1 rounded"
+              <div className="mt-2">
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 transition text-white text-sm font-medium"
                 >
-                  View Profile
-                </Link>
-                <Link
-                  to="/update-profile"
-                  className="text-sm text-white/90 hover:text-purple-400 px-3 py-1 rounded"
-                >
-                  Update Profile
-                </Link>
+                  Logout
+                </button>
               </div>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition text-white font-semibold cursor-pointer"
-          >
-            Logout
-          </button>
         </div>
       ) : (
         <div className="flex gap-3">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-            <Link to="/login" className="hover:text-[#00FFFF] transition">
+          <Link to="/login">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               Login
-            </Link>
-          </Button>
-          <Button className="bg-white text-purple-700 border border-purple-500 hover:bg-purple-50">
-            <Link to="/register" className="hover:text-[#00FFFF] transition">
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button className="bg-white text-purple-700 border border-purple-500 hover:bg-purple-50">
               Register
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       )}
     </nav>

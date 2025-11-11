@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
@@ -8,14 +8,29 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   useDocumentTitle("Signin");
-  const { signInWithEmailAndPasswordFunc, signInWithGoogleFunc, setLoading } =
-    useContext(AuthContext);
+  const {
+    user,
+    loading,
+    signInWithEmailAndPasswordFunc,
+    signInWithGoogleFunc,
+    setLoading,
+  } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/";
+
+  useEffect(() => {
+    if (user) {
+      // if already logged in, redirect to intended page
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
+
+  // don't render the page while auth state is initializing to avoid flash
+  if (loading) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,7 +56,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700/70 to-pink-500/70">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-700/70 to-pink-500/70">
       <div className="w-full max-w-md p-8 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl text-white">
         <h2 className="text-3xl md:text-4xl font-extrabold mb-2">
           Welcome back

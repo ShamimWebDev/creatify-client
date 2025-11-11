@@ -64,13 +64,14 @@ const Footer = () => {
           <h4 className="text-white font-semibold mb-4">Contact</h4>
           <p className="text-sm opacity-80">Email: hello@creatify.com</p>
           <p className="text-sm opacity-80 mt-2">
-            © 2024 Creatify. All rights reserved.
+            © 2025 Creatify. All rights reserved.
           </p>
         </div>
       </div>
 
       <div className="border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
-        Built with <span className="text-purple-400">❤️</span> by the Creatify Team
+        Built with <span className="text-purple-400">❤️</span> by the Creatify
+        Team
       </div>
     </footer>
   );

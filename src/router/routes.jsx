@@ -2,27 +2,58 @@ import { createBrowserRouter } from "react-router-dom";
 
 import PrivateRoute from "./PrivateRoute";
 
-// ====
-import Navbar from "../components/Navbar";
-import Home from "../pages/Home";
+// Components / Pages
 import MainLayout from "../layout/MainLayout";
+import Home from "../pages/Home";
+import Explore from "../pages/Explore";
+import ArtworkDetails from "../pages/ArtworkDetails";
+import AddArtwork from "../pages/AddArtwork";
+import MyGallery from "../pages/MyGallery";
+import Favorites from "../pages/Favorites";
 import Login from "../pages/Auth/Login";
 import Registration from "../pages/Auth/Registration";
-import Banner from "../components/Banner";
-import ArtCard from "../components/ArtCard";
-import TopArtists from "../components/TopArtists";
-import CommunityHighlights from "../components/CommunityHighlights";
 import Profile from "../pages/profile";
 import UpdateProfile from "../pages/UpdateProfile";
+import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
+      { path: "/", element: <Home /> },
+      { path: "/explore", element: <Explore /> },
       {
-        path: "/",
-        element: <Home />,
+        path: "/artworks/:id",
+        element: (
+          <PrivateRoute>
+            <ArtworkDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/add-artwork",
+        element: (
+          <PrivateRoute>
+            <AddArtwork />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/my-gallery",
+        element: (
+          <PrivateRoute>
+            <MyGallery />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/favorites",
+        element: (
+          <PrivateRoute>
+            <Favorites />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/profile",
@@ -40,72 +71,13 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-
-      //   {
-      //     path: "/all-models",
-      //     element: <AllModels />,
-      //     loader: () => fetch('https://3d-model-server.vercel.app/models')
-      //   },
-      //   {
-      //     path: "/profile",
-      //     element: (
-      //       <PrivateRoute>
-      //         <Profile />
-      //       </PrivateRoute>
-      //     ),
-      //   },
-      //   {
-      //     path: "/add-model",
-      //     element: (
-      //       <PrivateRoute>
-      //         <AddModel />
-      //       </PrivateRoute>
-      //     ),
-      //   },
-      //   {
-      //     path: "/model-details/:id",
-      //     element: (
-      //       <PrivateRoute>
-      //         <ModelDetails />
-      //       </PrivateRoute>
-      //     ),
-      //   },
-
-      //    {
-      //     path: "/my-models",
-      //     element: (
-      //       <PrivateRoute>
-      //         <MyModels />
-      //       </PrivateRoute>
-      //     ),
-      //   },
-
-      //    {
-      //     path: "/my-downloads",
-      //     element: (
-      //       <PrivateRoute>
-      //         <MyDownloads />
-      //       </PrivateRoute>
-      //     ),
-      //   },
-
-      //     {
-      //     path: "/update-model/:id",
-      //     element: (
-      //       <PrivateRoute>
-      //         <UpdateModel />
-      //       </PrivateRoute>
-      //     ),
-      //       loader: ({params}) => fetch(`https://3d-model-server.vercel.app/models/${params.id}`)
-      //   },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Registration />,
-      },
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Registration /> },
     ],
   },
+
+  // Catch-all 404
+  { path: "*", element: <NotFound /> },
 ]);
+
+export default router;

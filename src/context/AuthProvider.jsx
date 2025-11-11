@@ -19,7 +19,8 @@ const githubProvider = new GithubAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // mark loading=true until onAuthStateChanged runs to avoid UI flash on refresh
+  const [loading, setLoading] = useState(true);
 
   const createUserWithEmailAndPasswordFunc = (email, password) => {
     setLoading(true);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
@@ -11,6 +11,8 @@ const Registration = () => {
   useDocumentTitle("Registration");
 
   const {
+    user,
+    loading,
     createUserWithEmailAndPasswordFunc,
     updateProfileFunc,
     sendEmailVerificationFunc,
@@ -20,9 +22,22 @@ const Registration = () => {
     signInWithGoogleFunc,
   } = useContext(AuthContext);
 
-  const [form, setForm] = useState({ name: "", photo: "", email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      // already logged in — redirect to home
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
+
+  const [form, setForm] = useState({
+    name: "",
+    photo: "",
+    email: "",
+    password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -31,7 +46,8 @@ const Registration = () => {
     e.preventDefault();
     const { name, photo, email, password } = form;
 
-    const regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()\-_=+]).{8,}$/;
+    const regExp =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()\-_=+]).{8,}$/;
     if (!regExp.test(password)) {
       toast.error(
         "Password must be 8+ chars with uppercase, lowercase, number & special char"
@@ -72,14 +88,19 @@ const Registration = () => {
     }
   };
 
+  // don't render while auth initializes to avoid flashing login/register
+  if (loading) return null;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700/70 to-pink-500/70 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-700/70 to-pink-500/70 px-4">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md p-8 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl text-white"
       >
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-2">Create account</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-2">
+          Create account
+        </h2>
         <p className="text-sm text-white/85 mb-6">
           Join Creatify — showcase your art and connect with the community.
         </p>
