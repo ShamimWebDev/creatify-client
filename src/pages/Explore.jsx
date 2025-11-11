@@ -7,39 +7,36 @@ import PageMotion from "../components/PageMotion";
 const Explore = () => {
   const { artworks, loading, fetchArtworks } = useArtworks();
   const [query, setQuery] = useState("");
-  // initial load: show recent public artworks
+  const [categoryFilter, setCategoryFilter] = useState(""); // Category filter
+
+  // Initial load: recent public artworks
   useEffect(() => {
     fetchArtworks({ visibility: "public", sort: "-createdAt" });
   }, [fetchArtworks]);
 
-  // Debounced live search: when user types, trigger search after a short delay.
+  // Fetch artworks when query or category changes
   useEffect(() => {
     const timer = setTimeout(() => {
       const q = query?.trim();
-      // only call if fetchArtworks is available
-      if (typeof fetchArtworks === "function") {
-        fetchArtworks(
-          q
-            ? { visibility: "public", search: q, sort: "-createdAt" }
-            : { visibility: "public", sort: "-createdAt" }
-        );
-      }
+      const filters = { visibility: "public", sort: "-createdAt" };
+      if (q) filters.search = q;
+      if (categoryFilter) filters.category = categoryFilter;
+
+      fetchArtworks(filters);
     }, 350);
 
     return () => clearTimeout(timer);
-  }, [query, fetchArtworks]);
+  }, [query, categoryFilter, fetchArtworks]);
 
   const handleSearch = (e) => {
     e?.preventDefault();
     const q = query?.trim();
-    fetchArtworks(
-      q
-        ? { visibility: "public", search: q, sort: "-createdAt" }
-        : { visibility: "public", sort: "-createdAt" }
-    );
+    const filters = { visibility: "public", sort: "-createdAt" };
+    if (q) filters.search = q;
+    if (categoryFilter) filters.category = categoryFilter;
+    fetchArtworks(filters);
   };
 
-  // helper to highlight query matches in displayed text
   const highlightMatch = (text = "") => {
     const q = (query || "").trim();
     if (!q) return text;
@@ -56,6 +53,8 @@ const Explore = () => {
     );
   };
 
+  const categories = ["Landscape", "Portrait", "Abstract", "Still Life", "Digital", "Others"];
+
   return (
     <PageMotion className="p-6 min-h-screen bg-linear-to-br from-[#1e1b4b] via-[#4c1d95] to-[#831843]">
       <h2 className="text-3xl font-extrabold text-white mb-6 text-center">
@@ -65,7 +64,7 @@ const Explore = () => {
       {/* Search Bar */}
       <form
         onSubmit={handleSearch}
-        className="mb-8 max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 shadow-md"
+        className="mb-4 max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 shadow-md"
         aria-label="Search artworks"
       >
         <div className="relative flex-1 w-full">
@@ -105,6 +104,7 @@ const Explore = () => {
             type="button"
             onClick={() => {
               setQuery("");
+              setCategoryFilter("");
               handleSearch();
             }}
             className="px-4 py-2 bg-white/20 rounded-lg text-white font-semibold hover:bg-white/30 transition"
@@ -113,6 +113,34 @@ const Explore = () => {
           </button>
         </div>
       </form>
+
+      {/* Category Filter */}
+      <div className="mb-6 max-w-4xl mx-auto flex flex-wrap gap-3 items-center justify-center">
+        <button
+          onClick={() => setCategoryFilter("")}
+          className={`px-4 py-2 rounded-lg font-semibold ${
+            categoryFilter === ""
+              ? "bg-purple-600 text-white"
+              : "bg-white/20 text-white hover:bg-white/30"
+          }`}
+        >
+          All
+        </button>
+
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategoryFilter(cat)}
+            className={`px-4 py-2 rounded-lg font-semibold ${
+              categoryFilter === cat
+                ? "bg-purple-600 text-white"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
       {/* Artworks Grid */}
       {loading ? (
