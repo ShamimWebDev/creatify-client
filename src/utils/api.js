@@ -1,5 +1,5 @@
-// Vite exposes env vars via import.meta.env and expects them to be prefixed with VITE_
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_URL || "https://creatify-server./api";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 async function request(path, options = {}) {
   const url = `${API_BASE}${path}`;

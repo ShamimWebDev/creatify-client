@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Fade } from "react-awesome-reveal";
 
 const CommunityHighlights = () => {
   return (
@@ -10,9 +11,12 @@ const CommunityHighlights = () => {
 
       {/* Section Header */}
       <div className="relative text-center mb-14">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3">
-          Community Highlights
-        </h2>
+        {/* React Awesome Reveal: used for Fade animation */}
+        <Fade>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3">
+            Community Highlights
+          </h2>
+        </Fade>
         <p className="text-gray-500 text-lg">
           Celebrating creativity and artistic achievements
         </p>
@@ -79,6 +83,7 @@ const CommunityHighlights = () => {
             <h4 className="text-purple-600 font-semibold mb-3 text-lg flex items-center gap-2">
               📊 Community Stats
             </h4>
+
             <ul className="text-gray-700 text-sm space-y-1">
               <li>👩‍🎨 2,847 Active Artists</li>
               <li>🖼️ 12,593 Artworks Shared</li>

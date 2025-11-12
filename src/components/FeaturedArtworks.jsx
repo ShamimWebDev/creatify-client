@@ -4,6 +4,7 @@ import { useArtworks } from "../context/ArtworksContext";
 import Spinner from "./Spinner";
 import { motion } from "framer-motion";
 import { FaHeart } from "react-icons/fa";
+import { Fade } from "react-awesome-reveal";
 
 const FeaturedArtworks = () => {
   const { artworks, loading, fetchFeaturedArtworks } = useArtworks();
@@ -19,9 +20,13 @@ const FeaturedArtworks = () => {
       <div className="absolute bottom-10 right-1/3 w-80 h-80 bg-pink-300/20 rounded-full blur-3xl animate-pulse"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 drop-shadow-md">
-          🎨 Featured Artworks
-        </h2>
+        {/* React Awesome Reveal: used for Fade animation */}
+        <Fade>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 drop-shadow-md">
+            🎨 Featured Artworks
+          </h2>
+        </Fade>
+
         <p className="text-gray-500 mb-16 text-lg max-w-2xl mx-auto">
           Explore the latest masterpieces from our talented artists worldwide.
         </p>

@@ -38,6 +38,7 @@ const Banner = () => {
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-24 text-white">
          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+         {/* React Simple Typewriter: used for typing animation */}
           <Typewriter
             words={[
               "Discover & Share Creative Artworks",

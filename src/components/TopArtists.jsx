@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Fade } from "react-awesome-reveal";
 
 const TopArtists = () => {
   const artists = [
@@ -25,9 +26,12 @@ const TopArtists = () => {
       <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-pink-300/30 rounded-full blur-3xl"></div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3">
-          Top Artists of the Week
-        </h2>
+        {/* React Awesome Reveal: used for Fade animation */}
+        <Fade>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 drop-shadow-md">
+            Top Artists of the Week
+          </h2>
+        </Fade>
         <p className="text-gray-500 mb-14 text-lg">
           Meet the most creative minds of our art community 🎨
         </p>
