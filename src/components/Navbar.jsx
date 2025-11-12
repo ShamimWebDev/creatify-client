@@ -88,7 +88,7 @@ function Navbar() {
       <Link to="/">
         <div className="flex items-center">
           <div className="p-2 rounded-full">
-            <img src="logo.PNG" alt="Logo" className="w-10 h-10" />
+            <img src="/public/logo.png" alt="Logo" className="w-10 h-10" />
           </div>
           <h1 className="text-2xl font-semibold text-gray-800 ml-2">
             Creatify

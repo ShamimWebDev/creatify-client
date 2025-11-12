@@ -107,7 +107,7 @@ const ArtworkDetails = () => {
                 artwork.userPhoto ||
                 artwork.userAvatar ||
                 artwork.photoURL ||
-                "https://via.placeholder.com/80"
+                "https://i.pravatar.cc/80"
               }
               alt={artwork.userName || artwork.artist}
               className="w-16 h-16 rounded-full object-cover"
