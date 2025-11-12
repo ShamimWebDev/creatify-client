@@ -3,15 +3,24 @@ import { motion } from "framer-motion";
 
 const TopArtists = () => {
   const artists = [
-    { name: "Sarah Martinez", title: "Digital Artist", works: 45, likes: "2.1k" },
+    {
+      name: "Sarah Martinez",
+      title: "Digital Artist",
+      works: 45,
+      likes: "2.1k",
+    },
     { name: "Michael Chen", title: "Oil Painter", works: 32, likes: "1.8k" },
     { name: "Emma Wilson", title: "Sculptor", works: 28, likes: "1.5k" },
-    { name: "David Park", title: "Watercolor Artist", works: 38, likes: "1.3k" },
+    {
+      name: "David Park",
+      title: "Watercolor Artist",
+      works: 38,
+      likes: "1.3k",
+    },
   ];
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-white via-purple-50 to-white text-center overflow-hidden">
-      
       <div className="absolute top-10 left-1/4 w-60 h-60 bg-purple-300/30 rounded-full blur-3xl"></div>
       <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-pink-300/30 rounded-full blur-3xl"></div>
 
@@ -41,10 +50,12 @@ const TopArtists = () => {
               </div>
 
               {/* Artist info */}
-              <h3 className="font-semibold text-gray-800 text-xl">{artist.name}</h3>
+              <h3 className="font-semibold text-gray-800 text-xl">
+                {artist.name}
+              </h3>
               <p className="text-purple-600 text-sm mb-4">{artist.title}</p>
 
-              <div className="flex justify-center gap-3 text-base text-gray-600">
+              <div className="flex justify-center gap-3 text-base text-gray-500">
                 <span>🎨 {artist.works} Works</span>
                 <span>•</span>
                 <span>❤️ {artist.likes}</span>

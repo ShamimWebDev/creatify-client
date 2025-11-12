@@ -58,7 +58,7 @@ const CommunityHighlights = () => {
             <h4 className="text-orange-500 font-semibold mb-2 text-lg">
               🔥 Trending Now
             </h4>
-            <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+            <p className="text-gray-500 text-sm mb-4 leading-relaxed">
               Digital Art is gaining massive popularity this week with over{" "}
               <span className="font-semibold text-purple-600">500+</span> new
               uploads!

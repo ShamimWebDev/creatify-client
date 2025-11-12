@@ -33,7 +33,7 @@ const Navbar = () => {
       </div>
 
       {/* Navigation Links */}
-      <ul className="hidden md:flex items-center gap-8 text-gray-600 text-sm font-medium">
+      <ul className="hidden md:flex items-center gap-8 text-gray-500 text-sm font-medium">
         <li>
           <Link to="/" className="hover:text-purple-600">
             Home

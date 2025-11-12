@@ -1,18 +1,29 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const handleTheme = (checked) => {
+    setTheme(checked ? "dark" : "light");
+  };
+
   const { user, signOutFunc, loading } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
-  const avatarRef = React.useRef(null);
-  const closeTimerRef = React.useRef(null);
+  const avatarRef = useRef(null);
+  const closeTimerRef = useRef(null);
 
   // Close dropdown when clicking outside and on Escape
-  React.useEffect(() => {
+  useEffect(() => {
     const onDocClick = (e) => {
-      // if click is outside avatarRef, close
       if (avatarRef.current && !avatarRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
@@ -26,6 +37,7 @@ function Navbar() {
       document.addEventListener("click", onDocClick);
       document.addEventListener("keydown", onKey);
     }
+
     return () => {
       document.removeEventListener("click", onDocClick);
       document.removeEventListener("keydown", onKey);
@@ -85,7 +97,7 @@ function Navbar() {
       </Link>
 
       {/* Center: Navigation Links */}
-      <ul className="hidden md:flex items-center gap-8 text-gray-600 text-sm font-medium">
+      <ul className="hidden md:flex items-center gap-8 text-gray-500 text-sm font-medium">
         <li>
           <Link to="/" className="hover:text-purple-600">
             Home
@@ -113,13 +125,11 @@ function Navbar() {
         </li>
       </ul>
 
-      {/* Right: Auth Buttons / Profile */}
+      {/* Right: Auth / Profile */}
       {loading ? (
-        // while auth is initializing, keep space to avoid layout shift
         <div className="w-40" />
       ) : user ? (
         <div className="flex items-center gap-4">
-          {/* Profile Image */}
           <div
             ref={avatarRef}
             className="relative w-12 h-12 cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-400"
@@ -141,13 +151,15 @@ function Navbar() {
               alt={user.displayName || "Profile"}
               className="w-12 h-12 rounded-full object-cover border-2 border-[#00FFFF] transition-transform duration-200 ease-in-out"
             />
+
+            {/* Dropdown */}
             <div
               className={`absolute top-14 left-1/2 -translate-x-1/2 bg-gray-800 p-3 rounded shadow-lg text-center z-50 w-max min-w-40 transform origin-top transition-all duration-150 ${
                 showDropdown
                   ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
                   : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
               }`}
-              onMouseEnter={() => clearCloseTimer()}
+              onMouseEnter={clearCloseTimer}
               onMouseLeave={() => startCloseTimer()}
               onClick={(e) => e.stopPropagation()}
               role="menu"
@@ -156,6 +168,17 @@ function Navbar() {
               <p className="text-white font-semibold text-sm">
                 {user.displayName || "N/A"}
               </p>
+
+              {/* Toggle above logout */}
+              <div className="mt-2">
+                <input
+                  type="checkbox"
+                  className="toggle border-indigo-600 bg-indigo-500 checked:border-orange-500 checked:bg-orange-400 checked:text-orange-800"
+                  defaultChecked={theme === "dark"}
+                  onChange={(e) => handleTheme(e.target.checked)}
+                />
+              </div>
+
               <div className="mt-2">
                 <button
                   onClick={handleLogout}
