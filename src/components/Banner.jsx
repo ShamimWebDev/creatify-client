@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Button from "../ui/Button";
+import { Link } from "react-router-dom";
+import { Typewriter } from "react-simple-typewriter";
 
-
-const images = [
-  "/banner1.png",
-  "/banner2.png",
-  "/banner3.png",
-];
+const images = ["/banner1.png", "/banner2.png", "/banner3.png"];
 
 const Banner = () => {
   const [current, setCurrent] = useState(0);
@@ -40,20 +37,37 @@ const Banner = () => {
 
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-24 text-white">
-        <h1 className="text-5xl md:text-6xl font-extrabold mb-4 leading-tight">
-          Discover & Share Creative Artworks
+         <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+          <Typewriter
+            words={[
+              "Discover & Share Creative Artworks",
+              "Explore Stunning Creations",
+              "Join the Artistic Revolution",
+            ]}
+            loop={true}
+            cursor
+            cursorStyle="|"
+            typeSpeed={70}
+            deleteSpeed={40}
+            delaySpeed={2000}
+          />
         </h1>
         <p className="text-lg md:text-xl mb-8 max-w-2xl text-gray-100">
           Join a vibrant community of artists and art lovers. Showcase your
           creativity, explore amazing artworks, and connect with fellow artists.
         </p>
-        <div className="flex gap-4">
-          <Button className="bg-white text-purple-700 hover:bg-gray-100 font-semibold px-6 py-3 rounded-xl">
-            Explore Gallery
-          </Button>
-          <Button className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold px-6 py-3 rounded-xl">
-            Start Creating
-          </Button>
+        <div className="flex gap-4  mt-8">
+          <Link to="/explore">
+            <Button className="bg-white text-purple-700 hover:bg-gray-100 font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+              Explore Gallery
+            </Button>
+          </Link>
+
+          <Link to="/add-artwork">
+            <Button className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold px-6 py-3 rounded-xl backdrop-blur-sm transition-all duration-300 cursor-pointer">
+              Start Creating
+            </Button>
+          </Link>
         </div>
       </div>
 
