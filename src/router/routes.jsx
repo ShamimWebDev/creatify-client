@@ -15,6 +15,7 @@ import Registration from "../pages/Auth/Registration";
 import Profile from "../pages/profile";
 import UpdateProfile from "../pages/UpdateProfile";
 import NotFound from "../pages/NotFound";
+import FeaturedArtworks from "../components/FeaturedArtworks";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +69,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <UpdateProfile />
+          </PrivateRoute>
+        ),
+      },
+       {
+        path: "/FeaturedArtworks",
+        element: (
+          <PrivateRoute>
+            <FeaturedArtworks />
           </PrivateRoute>
         ),
       },

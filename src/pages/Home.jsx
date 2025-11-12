@@ -1,15 +1,16 @@
-import ArtCard from "../components/ArtCard";
+
 import Banner from "../components/Banner";
 import CommunityHighlights from "../components/CommunityHighlights";
 import Navbar from "../components/Navbar";
 import TopArtists from "../components/TopArtists";
 import PageMotion from "../components/PageMotion";
+import FeaturedArtworks from "../components/FeaturedArtworks";
 
 const Home = () => {
   return (
     <PageMotion className="">
       <Banner />
-      <ArtCard />
+      <FeaturedArtworks></FeaturedArtworks>
       <TopArtists />
       <CommunityHighlights />
 
