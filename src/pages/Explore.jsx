@@ -53,7 +53,14 @@ const Explore = () => {
     );
   };
 
-  const categories = ["Landscape", "Portrait", "Abstract", "Still Life", "Digital", "Others"];
+  const categories = [
+    "Landscape",
+    "Portrait",
+    "Abstract",
+    "Still Life",
+    "Digital",
+    "Others",
+  ];
 
   return (
     <PageMotion className="p-6 min-h-screen bg-linear-to-br from-[#1e1b4b] via-[#4c1d95] to-[#831843]">

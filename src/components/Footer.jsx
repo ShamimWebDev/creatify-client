@@ -1,4 +1,6 @@
 import React from "react";
+import { FaFacebook,  FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
@@ -13,11 +15,37 @@ const Footer = () => {
             A creative platform where artists showcase their work, connect with
             fellow creators, and inspire the world through art.
           </p>
-          <div className="flex gap-5 mt-4 text-xl text-gray-400">
-            <i className="ri-facebook-circle-line hover:text-purple-400 transition-all cursor-pointer"></i>
-            <i className="ri-twitter-line hover:text-purple-400 transition-all cursor-pointer"></i>
-            <i className="ri-instagram-line hover:text-purple-400 transition-all cursor-pointer"></i>
-            <i className="ri-linkedin-box-line hover:text-purple-400 transition-all cursor-pointer"></i>
+
+          {/* Social Icons */}
+          <div className="flex gap-5 mt-4 text-2xl text-gray-400">
+            <a
+              href="#"
+              className="hover:text-purple-400 transition-all"
+              aria-label="Facebook"
+            >
+              <FaFacebook />
+            </a>
+            <a
+              href="#"
+              className="hover:text-purple-400 transition-all"
+              aria-label="Twitter"
+            >
+              <FaXTwitter />
+            </a>
+            <a
+              href="#"
+              className="hover:text-purple-400 transition-all"
+              aria-label="Instagram"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="#"
+              className="hover:text-purple-400 transition-all"
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin />
+            </a>
           </div>
         </div>
 
