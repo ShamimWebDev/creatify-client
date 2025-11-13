@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useArtworks } from "../context/ArtworksContext";
-import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
@@ -9,13 +8,14 @@ import PageMotion from "../components/PageMotion";
 
 const ArtworkDetails = () => {
   const { id } = useParams();
-  const { getArtwork } = useArtworks();
+  const { getArtwork, likeArtwork, toggleFavorite, fetchArtworks } =
+    useArtworks();
   const [artwork, setArtwork] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
-  const { likeArtwork, toggleFavorite, fetchArtworks } = useArtworks();
   const [artistCount, setArtistCount] = useState(0);
 
+  // Fetch single artwork
   useEffect(() => {
     if (!id) return;
     let mounted = true;
@@ -29,7 +29,7 @@ const ArtworkDetails = () => {
     return () => (mounted = false);
   }, [id, getArtwork]);
 
-  // fetch artist total artworks
+  // Fetch artist’s total artworks
   useEffect(() => {
     if (!artwork) return;
     const owner = artwork.userEmail || artwork.user_email || artwork.ownerEmail;
@@ -48,40 +48,67 @@ const ArtworkDetails = () => {
     );
   if (!artwork) return <div className="p-6">Artwork not found.</div>;
 
+  // ✅ Like button
   const handleLike = async () => {
     try {
       const updated = await likeArtwork(id);
-      // update local artwork if server returned updated likes
       if (updated && updated.likes != null)
         setArtwork((a) => ({ ...a, likes: updated.likes }));
       else setArtwork((a) => ({ ...a, likes: (a.likes || 0) + 1 }));
-      toast.success("Liked");
+      toast.success("You liked this artwork 👍");
     } catch (err) {
       console.error(err);
       toast.error("Failed to like");
     }
   };
 
+  // ✅ Favorite toggle button
   const handleFavorite = async () => {
     if (!user) return toast.info("Please login to favorite");
     try {
       const isFav =
-        artwork.favorites && Array.isArray(artwork.favorites)
-          ? artwork.favorites.includes(user.email)
-          : false;
+        Array.isArray(artwork.favorites) &&
+        artwork.favorites.includes(user.email);
+
       const action = isFav ? "remove" : "add";
       const updated = await toggleFavorite(id, user.email, action);
-      if (updated) setArtwork(updated);
-      toast.success("Already added to favorites");
+
+      if (updated && updated.favorites) {
+        setArtwork((prev) => ({
+          ...prev,
+          favorites: updated.favorites,
+        }));
+      } else {
+        // fallback update
+        setArtwork((prev) => {
+          const updatedFavs = isFav
+            ? prev.favorites.filter((f) => f !== user.email)
+            : [...(prev.favorites || []), user.email];
+          return { ...prev, favorites: updatedFavs };
+        });
+      }
+
+      toast.success(
+        action === "add"
+          ? "Added to favorites ❤️"
+          : "Removed from favorites 💔"
+      );
     } catch (err) {
       console.error("favorite toggle error:", err);
       toast.error(err?.message || "Failed to update favorites");
     }
   };
 
+  const isFavorite =
+    Array.isArray(artwork.favorites) && artwork.favorites.includes(user?.email);
+  const favoriteCount = Array.isArray(artwork.favorites)
+    ? artwork.favorites.length
+    : 0;
+
   return (
     <PageMotion className="p-6 max-w-4xl mx-auto">
       <div className="grid md:grid-cols-3 gap-6">
+        {/* Artwork Image & Details */}
         <div className="md:col-span-2">
           <img
             src={artwork.image}
@@ -100,6 +127,7 @@ const ArtworkDetails = () => {
           )}
         </div>
 
+        {/* Sidebar */}
         <aside className="md:col-span-1 bg-white/5 p-4 rounded">
           <div className="flex items-center gap-3">
             <img
@@ -132,13 +160,15 @@ const ArtworkDetails = () => {
 
             <button
               onClick={handleFavorite}
-              className="w-full px-3 py-2 bg-white text-purple-700 rounded border border-purple-500"
+              className={`w-full px-3 py-2 rounded border ${
+                isFavorite
+                  ? "bg-red-500 border-red-600 text-white"
+                  : "bg-white border-purple-500 text-purple-700"
+              }`}
             >
-              {artwork.favorites &&
-              Array.isArray(artwork.favorites) &&
-              artwork.favorites.length > 0
-                ? "★ Favorited"
-                : "☆ Add to Favorites"}
+              {isFavorite
+                ? `★ Favorited (${favoriteCount})`
+                : `☆ Add to Favorites (${favoriteCount})`}
             </button>
           </div>
         </aside>

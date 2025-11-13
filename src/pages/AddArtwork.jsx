@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
 const AddArtwork = () => {
-  const { user } = useContext(AuthContext || {});
-  const { addArtwork } = useArtworks();
+  const { user } = useContext(AuthContext); // ✅ fixed
+  const { createArtwork } = useArtworks(); // ✅ use correct function
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -21,6 +21,7 @@ const AddArtwork = () => {
     price: "",
     visibility: "public",
   });
+
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
   const [imgError, setImgError] = useState("");
@@ -32,7 +33,8 @@ const AddArtwork = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
+
     if (name === "image") {
       setPreviewUrl(value);
       setImgError("");
@@ -42,6 +44,11 @@ const AddArtwork = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error("⚠️ Please login first to add artwork.");
+      return;
+    }
 
     if (!form.image || !form.title) {
       toast.error("Please provide at least an image URL and title.");
@@ -61,8 +68,10 @@ const AddArtwork = () => {
         favorites: [],
       };
 
-      const created = await addArtwork(payload);
+      const created = await createArtwork(payload);
       toast.success("✨ Artwork added successfully!");
+
+      // Reset form
       setForm({
         image: "",
         title: "",
@@ -79,8 +88,8 @@ const AddArtwork = () => {
       const id = created?._id ?? created?.id;
       if (id) navigate(`/artworks/${id}`);
     } catch (err) {
-      console.error(err);
-      toast.error(err.message || "Failed to add artwork");
+      console.error("AddArtwork Error:", err);
+      toast.error(err.message || "Failed to add artwork.");
     } finally {
       setLoading(false);
     }
@@ -121,6 +130,7 @@ const AddArtwork = () => {
                   alt="art preview"
                   className="w-full h-full object-cover"
                   onError={() => {
+                    console.warn("Invalid image URL:", previewUrl);
                     setImgError("Invalid image URL");
                     setPreviewUrl("");
                   }}
@@ -174,7 +184,6 @@ const AddArtwork = () => {
                 required
               />
 
-              {/* ✅ Category Dropdown (white with dark text) */}
               <select
                 name="category"
                 value={form.category}
@@ -234,8 +243,6 @@ const AddArtwork = () => {
                 placeholder="Price (optional)"
                 className="px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/60 focus:border-pink-400 transition"
               />
-
-            
               <select
                 name="visibility"
                 value={form.visibility}
